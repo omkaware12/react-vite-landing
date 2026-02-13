@@ -17,6 +17,20 @@ import AddRawMaterialMedicinesPage from "./pages/dashboard/AddRawMaterialMedicin
 import ProcessStepsPage from "./pages/dashboard/ProcessStepsPage";
 import NotFound from "./pages/NotFound";
 
+// Form & List pages
+import CreateFuel from "./pages/dashboard/fuel/CreateFuel";
+import FuelList from "./pages/dashboard/fuel/FuelList";
+import CreateMedicine from "./pages/dashboard/medicines/CreateMedicine";
+import MedicineList from "./pages/dashboard/medicines/MedicineList";
+import CreateMachine from "./pages/dashboard/machines/CreateMachine";
+import MachineList from "./pages/dashboard/machines/MachineList";
+import CreateRawMaterial from "./pages/dashboard/rawmaterial/CreateRawMaterial";
+import BulkRawMaterial from "./pages/dashboard/rawmaterial/BulkRawMaterial";
+import RawMaterialListAll from "./pages/dashboard/rawmaterial/RawMaterialListAll";
+import TransactionSelectMaterial from "./pages/dashboard/rawmaterial/TransactionSelectMaterial";
+import CreateProcessStep from "./pages/dashboard/process/CreateProcessStep";
+import ProcessStepList from "./pages/dashboard/process/ProcessStepList";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -31,13 +45,25 @@ const App = () => (
           <Route path="/dashboard" element={<DashboardLayout />}>
             <Route index element={<DashboardHome />} />
             <Route path="fuel" element={<FuelPage />} />
+            <Route path="fuel/add" element={<CreateFuel />} />
+            <Route path="fuel/list" element={<FuelList />} />
             <Route path="medicines" element={<MedicinesPage />} />
+            <Route path="medicines/add" element={<CreateMedicine />} />
+            <Route path="medicines/list" element={<MedicineList />} />
             <Route path="machines" element={<MachinesPage />} />
+            <Route path="machines/add" element={<CreateMachine />} />
+            <Route path="machines/list" element={<MachineList />} />
             <Route path="rawmaterial" element={<RawMaterialPage />} />
+            <Route path="rawmaterial/add" element={<CreateRawMaterial />} />
+            <Route path="rawmaterial/bulk" element={<BulkRawMaterial />} />
+            <Route path="rawmaterial/list" element={<RawMaterialListAll />} />
             <Route path="rawmaterial/transaction" element={<RawMaterialTransactionPage />} />
+            <Route path="rawmaterial/transaction/select" element={<TransactionSelectMaterial />} />
             <Route path="rawmaterial/inventory" element={<RawMaterialInventoryPage />} />
             <Route path="add-rawmaterial-medicines" element={<AddRawMaterialMedicinesPage />} />
             <Route path="medicines-process" element={<ProcessStepsPage />} />
+            <Route path="medicines-process/add" element={<CreateProcessStep />} />
+            <Route path="medicines-process/list" element={<ProcessStepList />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
