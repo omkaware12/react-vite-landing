@@ -46,6 +46,13 @@ export interface ProcessStep {
   description: string;
 }
 
+export interface BatchEntry {
+  id: number;
+  medicineName: string;
+  quantity: number;
+  status: string;
+}
+
 function getStore<T>(key: string): T[] {
   try {
     return JSON.parse(localStorage.getItem(key) || "[]");
@@ -99,5 +106,12 @@ export const store = {
     const items = getStore<ProcessStep>("processsteps");
     items.push({ ...p, id: items.length + 1 });
     setStore("processsteps", items);
+  },
+
+  getBatches: () => getStore<BatchEntry>("batches"),
+  addBatch: (b: Omit<BatchEntry, "id">) => {
+    const items = getStore<BatchEntry>("batches");
+    items.push({ ...b, id: items.length + 1 });
+    setStore("batches", items);
   },
 };

@@ -10,6 +10,7 @@ import {
   Archive,
   PlusSquare,
   Workflow,
+  Package,
   Search,
   Bell,
   ChevronDown,
@@ -25,6 +26,7 @@ const sidebarItems = [
   { label: "Raw Material Inventory", icon: Archive, path: "/dashboard/rawmaterial/inventory" },
   { label: "Add Raw Material to Medicines", icon: PlusSquare, path: "/dashboard/add-rawmaterial-medicines" },
   { label: "Process Steps", icon: Workflow, path: "/dashboard/medicines-process" },
+  { label: "Batches", icon: Package, path: "/dashboard/batches" },
 ];
 
 const DashboardLayout = () => {

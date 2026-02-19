@@ -34,6 +34,10 @@ import RawMaterialListAll from "./pages/dashboard/rawmaterial/RawMaterialListAll
 import TransactionSelectMaterial from "./pages/dashboard/rawmaterial/TransactionSelectMaterial";
 import CreateProcessStep from "./pages/dashboard/process/CreateProcessStep";
 import ProcessStepList from "./pages/dashboard/process/ProcessStepList";
+import BatchesPage from "./pages/dashboard/BatchesPage";
+import CreateBatch from "./pages/dashboard/batches/CreateBatch";
+import PreviewBatch from "./pages/dashboard/batches/PreviewBatch";
+import BatchList from "./pages/dashboard/batches/BatchList";
 
 const queryClient = new QueryClient();
 
@@ -72,6 +76,10 @@ const App = () => (
             <Route path="medicines-process" element={<ProcessStepsPage />} />
             <Route path="medicines-process/add" element={<CreateProcessStep />} />
             <Route path="medicines-process/list" element={<ProcessStepList />} />
+            <Route path="batches" element={<BatchesPage />} />
+            <Route path="batches/add" element={<CreateBatch />} />
+            <Route path="batches/preview" element={<PreviewBatch />} />
+            <Route path="batches/list" element={<BatchList />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
