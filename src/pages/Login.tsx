@@ -33,8 +33,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleRoleSelect = (roleId: string) => {
-    localStorage.setItem("userRole", roleId);
-    navigate("/dashboard");
+    navigate(`/role-login/${roleId}`);
   };
 
   return (

@@ -5,6 +5,10 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
+import RoleLogin from "./pages/RoleLogin";
+import ForgotPassword from "./pages/ForgotPassword";
+import OtpVerification from "./pages/OtpVerification";
+import ResetPassword from "./pages/ResetPassword";
 import DashboardLayout from "./components/DashboardLayout";
 import DashboardHome from "./pages/dashboard/DashboardHome";
 import FuelPage from "./pages/dashboard/FuelPage";
@@ -42,6 +46,10 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/role-login/:role" element={<RoleLogin />} />
+          <Route path="/forgot-password/:role" element={<ForgotPassword />} />
+          <Route path="/otp/:role" element={<OtpVerification />} />
+          <Route path="/reset-password/:role" element={<ResetPassword />} />
           <Route path="/dashboard" element={<DashboardLayout />}>
             <Route index element={<DashboardHome />} />
             <Route path="fuel" element={<FuelPage />} />
