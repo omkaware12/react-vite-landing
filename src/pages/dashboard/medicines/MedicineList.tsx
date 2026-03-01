@@ -28,6 +28,7 @@ const MedicineList = () => {
               <th className="px-6 py-3 text-[hsl(174,60%,30%)] font-semibold">Form</th>
               <th className="px-6 py-3 text-[hsl(174,60%,30%)] font-semibold">Strength</th>
               <th className="px-6 py-3 text-[hsl(174,60%,30%)] font-semibold">Unit</th>
+              <th className="px-6 py-3 text-[hsl(174,60%,30%)] font-semibold">Versions</th>
             </tr>
           </thead>
           <tbody>
@@ -39,10 +40,15 @@ const MedicineList = () => {
                 <td className="px-6 py-3">{m.form}</td>
                 <td className="px-6 py-3">{m.strength}</td>
                 <td className="px-6 py-3">{m.unit}</td>
+                <td className="px-6 py-3">
+                  <button onClick={() => navigate(`/dashboard/medicines/${m.id}/versions`)} className="text-[hsl(174,60%,30%)] font-semibold text-sm hover:underline">
+                    Manage
+                  </button>
+                </td>
               </tr>
             ))}
             {items.length === 0 && (
-              <tr><td colSpan={6} className="px-6 py-8 text-center text-gray-400">No medicines yet</td></tr>
+              <tr><td colSpan={7} className="px-6 py-8 text-center text-gray-400">No medicines yet</td></tr>
             )}
           </tbody>
         </table>

@@ -38,6 +38,8 @@ import BatchesPage from "./pages/dashboard/BatchesPage";
 import CreateBatch from "./pages/dashboard/batches/CreateBatch";
 import PreviewBatch from "./pages/dashboard/batches/PreviewBatch";
 import BatchList from "./pages/dashboard/batches/BatchList";
+import MedicineVersions from "./pages/dashboard/medicines/MedicineVersions";
+import VersionSteps from "./pages/dashboard/medicines/VersionSteps";
 
 const queryClient = new QueryClient();
 
@@ -62,6 +64,8 @@ const App = () => (
             <Route path="medicines" element={<MedicinesPage />} />
             <Route path="medicines/add" element={<CreateMedicine />} />
             <Route path="medicines/list" element={<MedicineList />} />
+            <Route path="medicines/:medicineId/versions" element={<MedicineVersions />} />
+            <Route path="medicines/:medicineId/versions/:versionId/steps" element={<VersionSteps />} />
             <Route path="machines" element={<MachinesPage />} />
             <Route path="machines/add" element={<CreateMachine />} />
             <Route path="machines/list" element={<MachineList />} />
