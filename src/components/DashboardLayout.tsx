@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Outlet, useNavigate, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
   Fuel,
@@ -14,20 +14,97 @@ import {
   Search,
   Bell,
   ChevronDown,
+  ChevronRight,
 } from "lucide-react";
 
-const sidebarItems = [
+interface SidebarItem {
+  label: string;
+  icon: React.ElementType;
+  path: string;
+}
+
+interface SidebarGroup {
+  label: string;
+  icon: React.ElementType;
+  basePath: string;
+  children: SidebarItem[];
+}
+
+type SidebarEntry = SidebarItem | SidebarGroup;
+
+const isGroup = (entry: SidebarEntry): entry is SidebarGroup =>
+  "children" in entry;
+
+const sidebarEntries: SidebarEntry[] = [
   { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
   { label: "Fuel", icon: Fuel, path: "/dashboard/fuel" },
   { label: "Medicines", icon: Pill, path: "/dashboard/medicines" },
   { label: "Machines", icon: Settings, path: "/dashboard/machines" },
-  { label: "Raw Material", icon: Atom, path: "/dashboard/rawmaterial" },
-  { label: "Raw Material Transaction", icon: ArrowLeftRight, path: "/dashboard/rawmaterial/transaction" },
-  { label: "Raw Material Inventory", icon: Archive, path: "/dashboard/rawmaterial/inventory" },
-  { label: "Add Raw Material to Medicines", icon: PlusSquare, path: "/dashboard/add-rawmaterial-medicines" },
+  {
+    label: "Raw Material",
+    icon: Atom,
+    basePath: "/dashboard/rawmaterial",
+    children: [
+      { label: "Overview", icon: Atom, path: "/dashboard/rawmaterial" },
+      { label: "Transaction", icon: ArrowLeftRight, path: "/dashboard/rawmaterial/transaction" },
+      { label: "Inventory", icon: Archive, path: "/dashboard/rawmaterial/inventory" },
+      { label: "Add to Medicines", icon: PlusSquare, path: "/dashboard/add-rawmaterial-medicines" },
+    ],
+  },
   { label: "Process Steps", icon: Workflow, path: "/dashboard/medicines-process" },
   { label: "Batches", icon: Package, path: "/dashboard/batches" },
 ];
+
+const SidebarLink = ({ item }: { item: SidebarItem }) => (
+  <li>
+    <NavLink
+      to={item.path}
+      end={item.path === "/dashboard" || item.path === "/dashboard/rawmaterial"}
+      className={({ isActive }) =>
+        `flex items-center gap-3 px-3 py-2 rounded-lg text-sm leading-5 transition-colors ${
+          isActive
+            ? "bg-white/20 font-semibold text-white"
+            : "hover:bg-white/10 text-white/80"
+        }`
+      }
+    >
+      <item.icon className="w-4.5 h-4.5 shrink-0" />
+      <span className="truncate">{item.label}</span>
+    </NavLink>
+  </li>
+);
+
+const SidebarGroupItem = ({ group }: { group: SidebarGroup }) => {
+  const location = useLocation();
+  const isChildActive = group.children.some(
+    (c) => location.pathname === c.path || location.pathname.startsWith(c.path + "/")
+  ) || location.pathname.startsWith(group.basePath);
+  const [open, setOpen] = useState(isChildActive);
+
+  return (
+    <li>
+      <button
+        onClick={() => setOpen(!open)}
+        className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm leading-5 transition-colors ${
+          isChildActive ? "bg-white/10 text-white" : "hover:bg-white/10 text-white/80"
+        }`}
+      >
+        <group.icon className="w-4.5 h-4.5 shrink-0" />
+        <span className="truncate flex-1 text-left">{group.label}</span>
+        <ChevronRight
+          className={`w-4 h-4 shrink-0 transition-transform duration-200 ${open ? "rotate-90" : ""}`}
+        />
+      </button>
+      {open && (
+        <ul className="ml-5 pl-3 border-l border-white/15 mt-1 flex flex-col gap-0.5">
+          {group.children.map((child) => (
+            <SidebarLink key={child.path} item={child} />
+          ))}
+        </ul>
+      )}
+    </li>
+  );
+};
 
 const DashboardLayout = () => {
   const navigate = useNavigate();
@@ -44,24 +121,13 @@ const DashboardLayout = () => {
         </div>
         <nav className="flex-1 px-3 py-3 overflow-y-auto">
           <ul className="flex flex-col gap-0.5">
-            {sidebarItems.map((item) => (
-              <li key={item.path}>
-                <NavLink
-                  to={item.path}
-                  end={item.path === "/dashboard"}
-                  className={({ isActive }) =>
-                    `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm leading-5 transition-colors whitespace-nowrap overflow-hidden text-ellipsis ${
-                      isActive
-                        ? "bg-white/20 font-semibold text-white"
-                        : "hover:bg-white/10 text-white/80"
-                    }`
-                  }
-                >
-                  <item.icon className="w-5 h-5 shrink-0" />
-                  <span className="truncate">{item.label}</span>
-                </NavLink>
-              </li>
-            ))}
+            {sidebarEntries.map((entry) =>
+              isGroup(entry) ? (
+                <SidebarGroupItem key={entry.basePath} group={entry} />
+              ) : (
+                <SidebarLink key={entry.path} item={entry} />
+              )
+            )}
           </ul>
         </nav>
       </aside>
