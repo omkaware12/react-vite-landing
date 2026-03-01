@@ -44,6 +44,22 @@ export interface ProcessStep {
   id: number;
   name: string;
   description: string;
+  pricePerUnit: number;
+  unit: "minute" | "hour";
+}
+
+export interface MedicineVersion {
+  id: number;
+  medicineId: number;
+  versionName: string;
+  steps: VersionStep[];
+}
+
+export interface VersionStep {
+  medicineProcessStepId: number;
+  stepOrder: number;
+  repeatCount: number;
+  quantity: number;
 }
 
 export interface BatchEntry {
@@ -106,6 +122,21 @@ export const store = {
     const items = getStore<ProcessStep>("processsteps");
     items.push({ ...p, id: items.length + 1 });
     setStore("processsteps", items);
+  },
+
+  getVersions: () => getStore<MedicineVersion>("medicineversions"),
+  addVersion: (v: Omit<MedicineVersion, "id">) => {
+    const items = getStore<MedicineVersion>("medicineversions");
+    items.push({ ...v, id: items.length + 1 });
+    setStore("medicineversions", items);
+  },
+  addStepToVersion: (versionId: number, step: VersionStep) => {
+    const items = getStore<MedicineVersion>("medicineversions");
+    const idx = items.findIndex((v) => v.id === versionId);
+    if (idx !== -1) {
+      items[idx].steps.push(step);
+      setStore("medicineversions", items);
+    }
   },
 
   getBatches: () => getStore<BatchEntry>("batches"),

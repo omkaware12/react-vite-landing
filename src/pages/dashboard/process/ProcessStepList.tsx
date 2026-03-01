@@ -18,13 +18,15 @@ const ProcessStepList = () => {
         <ArrowLeft className="w-4 h-4" /> Back
       </button>
       <h1 className="text-2xl font-bold text-gray-800 mb-4">All Process Steps</h1>
-      <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
+      <div className="bg-white rounded-xl shadow-sm border overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
             <tr className="bg-gray-50 text-left">
               <th className="px-6 py-3 text-[hsl(174,60%,30%)] font-semibold">#</th>
               <th className="px-6 py-3 text-[hsl(174,60%,30%)] font-semibold">Step Name</th>
               <th className="px-6 py-3 text-[hsl(174,60%,30%)] font-semibold">Description</th>
+              <th className="px-6 py-3 text-[hsl(174,60%,30%)] font-semibold">Price/Unit</th>
+              <th className="px-6 py-3 text-[hsl(174,60%,30%)] font-semibold">Time Unit</th>
             </tr>
           </thead>
           <tbody>
@@ -33,10 +35,12 @@ const ProcessStepList = () => {
                 <td className="px-6 py-3">{(page - 1) * PAGE_SIZE + i + 1}</td>
                 <td className="px-6 py-3">{p.name}</td>
                 <td className="px-6 py-3">{p.description}</td>
+                <td className="px-6 py-3">₹{p.pricePerUnit ?? 0}</td>
+                <td className="px-6 py-3 capitalize">{p.unit ?? "-"}</td>
               </tr>
             ))}
             {items.length === 0 && (
-              <tr><td colSpan={3} className="px-6 py-8 text-center text-gray-400">No process steps yet</td></tr>
+              <tr><td colSpan={5} className="px-6 py-8 text-center text-gray-400">No process steps yet</td></tr>
             )}
           </tbody>
         </table>

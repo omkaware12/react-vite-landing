@@ -8,11 +8,16 @@ const CreateProcessStep = () => {
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [pricePerUnit, setPricePerUnit] = useState("");
+  const [unit, setUnit] = useState<"minute" | "hour">("minute");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name) { toast({ title: "Please enter a name", variant: "destructive" }); return; }
-    store.addProcessStep({ name, description });
+    if (!name || !pricePerUnit) {
+      toast({ title: "Please fill all required fields", variant: "destructive" });
+      return;
+    }
+    store.addProcessStep({ name, description, pricePerUnit: parseFloat(pricePerUnit) || 0, unit });
     toast({ title: "Process step created" });
     navigate("/dashboard/medicines-process");
   };
@@ -32,6 +37,19 @@ const CreateProcessStep = () => {
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Description</label>
             <textarea placeholder="Enter description" value={description} onChange={e => setDescription(e.target.value)} rows={3} className="w-full border rounded-lg px-4 py-3 text-sm resize-none" />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Price Per Unit</label>
+              <input type="number" step="0.01" placeholder="0.00" value={pricePerUnit} onChange={e => setPricePerUnit(e.target.value)} className="w-full border rounded-lg px-4 py-3 text-sm" />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Time Unit</label>
+              <select value={unit} onChange={e => setUnit(e.target.value as "minute" | "hour")} className="w-full border rounded-lg px-4 py-3 text-sm bg-white">
+                <option value="minute">Minute</option>
+                <option value="hour">Hour</option>
+              </select>
+            </div>
           </div>
           <button type="submit" className="w-full bg-[hsl(174,60%,30%)] text-white py-3 rounded-lg font-semibold hover:bg-[hsl(174,60%,25%)] transition-colors">
             Save Process Step
