@@ -38,33 +38,36 @@ const DashboardLayout = () => {
   return (
     <div className="flex min-h-screen bg-gray-50">
       {/* Sidebar */}
-      <aside className="w-60 bg-[hsl(174,60%,30%)] text-white flex flex-col fixed inset-y-0 left-0 z-30">
-        <div className="p-5 pb-4">
-          <h2 className="font-playfair text-xl font-bold">Admin</h2>
+      <aside className="w-64 bg-[hsl(174,60%,30%)] text-white flex flex-col fixed inset-y-0 left-0 z-30">
+        <div className="px-5 py-4 border-b border-white/10">
+          <h2 className="font-playfair text-xl font-bold tracking-wide">Admin</h2>
         </div>
-        <nav className="flex-1 px-3 space-y-1 overflow-y-auto">
-          {sidebarItems.map((item) => (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              end={item.path === "/dashboard"}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors ${
-                  isActive
-                    ? "bg-white/20 font-medium"
-                    : "hover:bg-white/10 text-white/80"
-                }`
-              }
-            >
-              <item.icon className="w-5 h-5 shrink-0" />
-              <span>{item.label}</span>
-            </NavLink>
-          ))}
+        <nav className="flex-1 px-3 py-3 overflow-y-auto">
+          <ul className="flex flex-col gap-0.5">
+            {sidebarItems.map((item) => (
+              <li key={item.path}>
+                <NavLink
+                  to={item.path}
+                  end={item.path === "/dashboard"}
+                  className={({ isActive }) =>
+                    `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm leading-5 transition-colors whitespace-nowrap overflow-hidden text-ellipsis ${
+                      isActive
+                        ? "bg-white/20 font-semibold text-white"
+                        : "hover:bg-white/10 text-white/80"
+                    }`
+                  }
+                >
+                  <item.icon className="w-5 h-5 shrink-0" />
+                  <span className="truncate">{item.label}</span>
+                </NavLink>
+              </li>
+            ))}
+          </ul>
         </nav>
       </aside>
 
       {/* Main content */}
-      <div className="flex-1 ml-60">
+      <div className="flex-1 ml-64">
         {/* Top bar */}
         <header className="h-16 bg-white border-b flex items-center justify-between px-6 sticky top-0 z-20">
           <div className="flex items-center gap-3 bg-gray-100 rounded-full px-4 py-2 w-80">
