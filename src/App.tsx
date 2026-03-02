@@ -39,6 +39,8 @@ import CreateBatch from "./pages/dashboard/batches/CreateBatch";
 import PreviewBatch from "./pages/dashboard/batches/PreviewBatch";
 import BatchList from "./pages/dashboard/batches/BatchList";
 import BatchDetail from "./pages/dashboard/batches/BatchDetail";
+import EndBatch from "./pages/dashboard/batches/EndBatch";
+import EndBatchPreview from "./pages/dashboard/batches/EndBatchPreview";
 import MedicineVersions from "./pages/dashboard/medicines/MedicineVersions";
 import VersionSteps from "./pages/dashboard/medicines/VersionSteps";
 
@@ -86,6 +88,8 @@ const App = () => (
             <Route path="batches/preview" element={<PreviewBatch />} />
             <Route path="batches/list" element={<BatchList />} />
             <Route path="batches/:batchId" element={<BatchDetail />} />
+            <Route path="batches/:batchId/end" element={<EndBatch />} />
+            <Route path="batches/:batchId/end/preview" element={<EndBatchPreview />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

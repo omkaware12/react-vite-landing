@@ -60,6 +60,11 @@ const BatchDetail = () => {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-foreground">Batch: {batch.batchNumber}</h1>
         <div className="flex gap-2">
+          {batch.status === "In Progress" && (
+            <Button onClick={() => navigate(`/dashboard/batches/${batchId}/end`)} className="bg-destructive hover:bg-destructive/90 gap-2">
+              End Batch
+            </Button>
+          )}
           {batch.status === "Success" && (
             <Button variant="outline" onClick={() => setShowBom(!showBom)} className="gap-2">
               <FileText className="w-4 h-4" /> {showBom ? "Hide BOM" : "View BOM"}
