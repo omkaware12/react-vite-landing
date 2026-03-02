@@ -90,6 +90,11 @@ export interface BatchProcessStep {
   unit: "minute" | "hour";
 }
 
+export interface PackingDetail {
+  packingId: string;
+  numberOfPackages: number;
+}
+
 export interface BatchEntry {
   id: number;
   batchNumber: string;
@@ -110,6 +115,10 @@ export interface BatchEntry {
   totalBatchCost: number;
   productionDate: string;
   createdAt: string;
+  producedQuantity?: number;
+  packingDetails?: PackingDetail[];
+  remark?: string;
+  completionDate?: string;
 }
 
 function getStore<T>(key: string): T[] {
