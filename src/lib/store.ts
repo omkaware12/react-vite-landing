@@ -62,11 +62,54 @@ export interface VersionStep {
   quantity: number;
 }
 
+export interface BatchRawMaterial {
+  rawMaterialId: number;
+  rawMaterialName: string;
+  requiredQuantity: number;
+  consumedQuantity: number;
+  pricePerUnit: number;
+  totalCost: number;
+}
+
+export interface BatchMachine {
+  machineId: number;
+  machineName: string;
+  timeUsed: number;
+  costPerTimeUnit: number;
+  totalCost: number;
+}
+
+export interface BatchProcessStep {
+  processStepId: number;
+  stepName: string;
+  stepOrder: number;
+  repeatCount: number;
+  totalQuantity: number;
+  pricePerUnit: number;
+  totalCost: number;
+  unit: "minute" | "hour";
+}
+
 export interface BatchEntry {
   id: number;
+  batchNumber: string;
+  medicineId: number;
   medicineName: string;
+  medicineDescription: string;
+  versionId: number;
+  versionName: string;
   quantity: number;
-  status: string;
+  unit: string;
+  status: "In Progress" | "Success" | "Failed";
+  rawMaterials: BatchRawMaterial[];
+  machines: BatchMachine[];
+  processSteps: BatchProcessStep[];
+  totalMaterialCost: number;
+  totalMachineCost: number;
+  totalLabourCost: number;
+  totalBatchCost: number;
+  productionDate: string;
+  createdAt: string;
 }
 
 function getStore<T>(key: string): T[] {
@@ -142,7 +185,17 @@ export const store = {
   getBatches: () => getStore<BatchEntry>("batches"),
   addBatch: (b: Omit<BatchEntry, "id">) => {
     const items = getStore<BatchEntry>("batches");
-    items.push({ ...b, id: items.length + 1 });
+    const id = items.length + 1;
+    items.push({ ...b, id });
     setStore("batches", items);
+    return id;
+  },
+  updateBatch: (id: number, updates: Partial<BatchEntry>) => {
+    const items = getStore<BatchEntry>("batches");
+    const idx = items.findIndex((b) => b.id === id);
+    if (idx !== -1) {
+      items[idx] = { ...items[idx], ...updates };
+      setStore("batches", items);
+    }
   },
 };
