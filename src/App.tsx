@@ -24,10 +24,14 @@ import NotFound from "./pages/NotFound";
 // Form & List pages
 import CreateFuel from "./pages/dashboard/fuel/CreateFuel";
 import FuelList from "./pages/dashboard/fuel/FuelList";
+import FuelDetail from "./pages/dashboard/fuel/FuelDetail";
+import UpdateFuel from "./pages/dashboard/fuel/UpdateFuel";
 import CreateMedicine from "./pages/dashboard/medicines/CreateMedicine";
 import MedicineList from "./pages/dashboard/medicines/MedicineList";
 import CreateMachine from "./pages/dashboard/machines/CreateMachine";
 import MachineList from "./pages/dashboard/machines/MachineList";
+import MachineDetail from "./pages/dashboard/machines/MachineDetail";
+import UpdateMachine from "./pages/dashboard/machines/UpdateMachine";
 import CreateRawMaterial from "./pages/dashboard/rawmaterial/CreateRawMaterial";
 import BulkRawMaterial from "./pages/dashboard/rawmaterial/BulkRawMaterial";
 import RawMaterialListAll from "./pages/dashboard/rawmaterial/RawMaterialListAll";
@@ -65,6 +69,8 @@ const App = () => (
             <Route path="fuel" element={<FuelPage />} />
             <Route path="fuel/add" element={<CreateFuel />} />
             <Route path="fuel/list" element={<FuelList />} />
+            <Route path="fuel/:fuelId" element={<FuelDetail />} />
+            <Route path="fuel/:fuelId/edit" element={<UpdateFuel />} />
             <Route path="medicines" element={<MedicinesPage />} />
             <Route path="medicines/add" element={<CreateMedicine />} />
             <Route path="medicines/list" element={<MedicineList />} />
@@ -73,6 +79,8 @@ const App = () => (
             <Route path="machines" element={<MachinesPage />} />
             <Route path="machines/add" element={<CreateMachine />} />
             <Route path="machines/list" element={<MachineList />} />
+            <Route path="machines/:machineId" element={<MachineDetail />} />
+            <Route path="machines/:machineId/edit" element={<UpdateMachine />} />
             <Route path="rawmaterial" element={<RawMaterialPage />} />
             <Route path="rawmaterial/add" element={<CreateRawMaterial />} />
             <Route path="rawmaterial/bulk" element={<BulkRawMaterial />} />

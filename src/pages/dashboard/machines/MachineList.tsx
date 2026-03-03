@@ -25,16 +25,20 @@ const MachineList = () => {
               <th className="px-6 py-3 text-[hsl(174,60%,30%)] font-semibold">#</th>
               <th className="px-6 py-3 text-[hsl(174,60%,30%)] font-semibold">Machine Name</th>
               <th className="px-6 py-3 text-[hsl(174,60%,30%)] font-semibold">Fuel Type</th>
-              <th className="px-6 py-3 text-[hsl(174,60%,30%)] font-semibold">Gas Consumption (KG)</th>
+              <th className="px-6 py-3 text-[hsl(174,60%,30%)] font-semibold">Total Cost/Hour</th>
             </tr>
           </thead>
           <tbody>
             {pageItems.map((m, i) => (
-              <tr key={m.id} className={i % 2 === 0 ? "bg-[hsl(174,40%,97%)]" : "bg-white"}>
+              <tr
+                key={m.id}
+                className={`${i % 2 === 0 ? "bg-[hsl(174,40%,97%)]" : "bg-white"} cursor-pointer hover:bg-[hsl(174,40%,93%)] transition-colors`}
+                onClick={() => navigate(`/dashboard/machines/${m.id}`)}
+              >
                 <td className="px-6 py-3">{(page - 1) * PAGE_SIZE + i + 1}</td>
                 <td className="px-6 py-3">{m.name}</td>
                 <td className="px-6 py-3">{m.fuelType}</td>
-                <td className="px-6 py-3">{m.gasConsumption}</td>
+                <td className="px-6 py-3">₹ {(m.totalMachineCostPerHour ?? 0).toFixed(2)}</td>
               </tr>
             ))}
             {items.length === 0 && (

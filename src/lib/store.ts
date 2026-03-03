@@ -5,6 +5,10 @@ export interface FuelEntry {
   fuelType: string;
   costPerUnit: number;
   unit: string;
+  createdAt: string;
+  updatedAt: string;
+  createdBy: string;
+  updatedBy: string;
 }
 
 export interface MedicineEntry {
@@ -21,7 +25,17 @@ export interface MachineEntry {
   id: number;
   name: string;
   fuelType: string;
-  gasConsumption: number;
+  electricityType: string;
+  motorConsumptionInHp: number;
+  heaterConsumptionInKw: number;
+  gasConsumptionInKgs: number;
+  electricityUnitPerHour: number;
+  electricityCostPerMachineHour: number;
+  gasCostPerMachineHour: number;
+  totalMachineCostPerHour: number;
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface RawMaterialEntry {
@@ -175,9 +189,22 @@ function setStore<T>(key: string, data: T[]) {
 
 export const store = {
   getFuels: () => getStore<FuelEntry>("fuels"),
-  addFuel: (f: Omit<FuelEntry, "id">) => {
+  addFuel: (f: Omit<FuelEntry, "id" | "createdAt" | "updatedAt" | "createdBy" | "updatedBy">) => {
     const items = getStore<FuelEntry>("fuels");
-    items.push({ ...f, id: items.length + 1 });
+    const now = new Date().toISOString();
+    items.push({ ...f, id: items.length + 1, createdAt: now, updatedAt: now, createdBy: "Admin", updatedBy: "Admin" });
+    setStore("fuels", items);
+  },
+  updateFuel: (id: number, updates: Partial<FuelEntry>) => {
+    const items = getStore<FuelEntry>("fuels");
+    const idx = items.findIndex((f) => f.id === id);
+    if (idx !== -1) {
+      items[idx] = { ...items[idx], ...updates, updatedAt: new Date().toISOString(), updatedBy: "Admin" };
+      setStore("fuels", items);
+    }
+  },
+  deleteFuel: (id: number) => {
+    const items = getStore<FuelEntry>("fuels").filter((f) => f.id !== id);
     setStore("fuels", items);
   },
 
@@ -189,9 +216,22 @@ export const store = {
   },
 
   getMachines: () => getStore<MachineEntry>("machines"),
-  addMachine: (m: Omit<MachineEntry, "id">) => {
+  addMachine: (m: Omit<MachineEntry, "id" | "createdAt" | "updatedAt">) => {
     const items = getStore<MachineEntry>("machines");
-    items.push({ ...m, id: items.length + 1 });
+    const now = new Date().toISOString();
+    items.push({ ...m, id: items.length + 1, createdAt: now, updatedAt: now });
+    setStore("machines", items);
+  },
+  updateMachine: (id: number, updates: Partial<MachineEntry>) => {
+    const items = getStore<MachineEntry>("machines");
+    const idx = items.findIndex((m) => m.id === id);
+    if (idx !== -1) {
+      items[idx] = { ...items[idx], ...updates, updatedAt: new Date().toISOString() };
+      setStore("machines", items);
+    }
+  },
+  deleteMachine: (id: number) => {
+    const items = getStore<MachineEntry>("machines").filter((m) => m.id !== id);
     setStore("machines", items);
   },
 
