@@ -95,6 +95,46 @@ export interface PackingDetail {
   numberOfPackages: number;
 }
 
+export type JobCardStepStatus = "PENDING" | "COMPLETED" | "FAILED";
+
+export interface JobCardRawMaterial {
+  rawMaterialId: number;
+  rawMaterialName: string;
+  quantityUsed: number;
+  cost: number;
+}
+
+export interface JobCardMachine {
+  machineId: number;
+  machineName: string;
+  timeUsed: number;
+  cost: number;
+}
+
+export interface JobCardProcessStep {
+  processStepId: number;
+  stepName: string;
+  stepOrder: number;
+  timeRequired: number;
+  cost: number;
+  status: JobCardStepStatus;
+  failureRemark?: string;
+}
+
+export interface JobCard {
+  id: number;
+  batchId: number;
+  batchNumber: string;
+  totalRawMaterialCost: number;
+  totalMachineCost: number;
+  totalProcessCost: number;
+  grandTotalCost: number;
+  createdAt: string;
+  rawMaterials: JobCardRawMaterial[];
+  machines: JobCardMachine[];
+  processSteps: JobCardProcessStep[];
+}
+
 export interface BatchEntry {
   id: number;
   batchNumber: string;
@@ -205,6 +245,23 @@ export const store = {
     if (idx !== -1) {
       items[idx] = { ...items[idx], ...updates };
       setStore("batches", items);
+    }
+  },
+
+  getJobCards: () => getStore<JobCard>("jobcards"),
+  addJobCard: (j: Omit<JobCard, "id">) => {
+    const items = getStore<JobCard>("jobcards");
+    const id = items.length + 1;
+    items.push({ ...j, id });
+    setStore("jobcards", items);
+    return id;
+  },
+  updateJobCard: (id: number, updates: Partial<JobCard>) => {
+    const items = getStore<JobCard>("jobcards");
+    const idx = items.findIndex((j) => j.id === id);
+    if (idx !== -1) {
+      items[idx] = { ...items[idx], ...updates };
+      setStore("jobcards", items);
     }
   },
 };

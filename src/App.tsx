@@ -43,6 +43,7 @@ import EndBatch from "./pages/dashboard/batches/EndBatch";
 import EndBatchPreview from "./pages/dashboard/batches/EndBatchPreview";
 import MedicineVersions from "./pages/dashboard/medicines/MedicineVersions";
 import VersionSteps from "./pages/dashboard/medicines/VersionSteps";
+import JobCardDetail from "./pages/dashboard/batches/JobCardDetail";
 
 const queryClient = new QueryClient();
 
@@ -90,6 +91,7 @@ const App = () => (
             <Route path="batches/:batchId" element={<BatchDetail />} />
             <Route path="batches/:batchId/end" element={<EndBatch />} />
             <Route path="batches/:batchId/end/preview" element={<EndBatchPreview />} />
+            <Route path="batches/:batchId/jobcard" element={<JobCardDetail />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
