@@ -30,7 +30,11 @@ const FuelList = () => {
           </thead>
           <tbody>
             {pageItems.map((f, i) => (
-              <tr key={f.id} className={i % 2 === 0 ? "bg-[hsl(174,40%,97%)]" : "bg-white"}>
+              <tr
+                key={f.id}
+                className={`${i % 2 === 0 ? "bg-[hsl(174,40%,97%)]" : "bg-white"} cursor-pointer hover:bg-[hsl(174,40%,93%)] transition-colors`}
+                onClick={() => navigate(`/dashboard/fuel/${f.id}`)}
+              >
                 <td className="px-6 py-3">{(page - 1) * PAGE_SIZE + i + 1}</td>
                 <td className="px-6 py-3">{f.fuelType}</td>
                 <td className="px-6 py-3">{f.unit}</td>
