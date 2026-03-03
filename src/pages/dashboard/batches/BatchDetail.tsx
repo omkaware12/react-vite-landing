@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { store } from "@/lib/store";
-import { ArrowLeft, Edit, FileText, FlaskConical, Cog, Users, DollarSign } from "lucide-react";
+import { ArrowLeft, Edit, FileText, FlaskConical, Cog, Users, DollarSign, ClipboardList } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -65,6 +65,9 @@ const BatchDetail = () => {
               End Batch
             </Button>
           )}
+          <Button variant="outline" onClick={() => navigate(`/dashboard/batches/${batchId}/jobcard`)} className="gap-2">
+            <ClipboardList className="w-4 h-4" /> View Job Card
+          </Button>
           {batch.status === "Success" && (
             <Button variant="outline" onClick={() => setShowBom(!showBom)} className="gap-2">
               <FileText className="w-4 h-4" /> {showBom ? "Hide BOM" : "View BOM"}

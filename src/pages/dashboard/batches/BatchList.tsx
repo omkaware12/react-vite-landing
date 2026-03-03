@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { store } from "@/lib/store";
-import { ArrowLeft, Eye, StopCircle } from "lucide-react";
+import { ArrowLeft, Eye, StopCircle, ClipboardList } from "lucide-react";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 
@@ -70,8 +70,11 @@ const BatchList = () => {
                   <TableCell>{b.productionDate}</TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      <button onClick={(e) => { e.stopPropagation(); navigate(`/dashboard/batches/${b.id}`); }} className="text-[hsl(174,60%,30%)] hover:underline text-sm font-medium flex items-center gap-1">
+                      <button onClick={(e) => { e.stopPropagation(); navigate(`/dashboard/batches/${b.id}`); }} className="text-primary hover:underline text-sm font-medium flex items-center gap-1">
                         <Eye className="w-3.5 h-3.5" /> View
+                      </button>
+                      <button onClick={(e) => { e.stopPropagation(); navigate(`/dashboard/batches/${b.id}/jobcard`); }} className="text-primary hover:underline text-sm font-medium flex items-center gap-1">
+                        <ClipboardList className="w-3.5 h-3.5" /> Job Card
                       </button>
                       {b.status === "In Progress" && (
                         <button onClick={(e) => { e.stopPropagation(); navigate(`/dashboard/batches/${b.id}/end`); }} className="text-destructive hover:underline text-sm font-medium flex items-center gap-1">

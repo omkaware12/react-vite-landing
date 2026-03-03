@@ -105,8 +105,9 @@ const CreateBatch = () => {
   const handleConfirm = () => {
     if (!preview || !selectedMedicine || !selectedVersion) return;
     const batchCount = store.getBatches().length;
-    store.addBatch({
-      batchNumber: `BATCH-${String(batchCount + 1).padStart(4, "0")}`,
+    const batchNumber = `BATCH-${String(batchCount + 1).padStart(4, "0")}`;
+    const batchId = store.addBatch({
+      batchNumber,
       medicineId: selectedMedicine.id,
       medicineName: selectedMedicine.name,
       medicineDescription: selectedMedicine.description || "",
@@ -125,7 +126,39 @@ const CreateBatch = () => {
       productionDate: new Date().toISOString().split("T")[0],
       createdAt: new Date().toISOString(),
     });
-    toast({ title: "Batch Created", description: `Batch has been created successfully` });
+
+    // Auto-generate Job Card
+    store.addJobCard({
+      batchId,
+      batchNumber,
+      totalRawMaterialCost: preview.totalMaterialCost,
+      totalMachineCost: preview.totalMachineCost,
+      totalProcessCost: preview.totalLabourCost,
+      grandTotalCost: preview.totalBatchCost,
+      createdAt: new Date().toISOString(),
+      rawMaterials: preview.rawMaterials.map((rm) => ({
+        rawMaterialId: rm.rawMaterialId,
+        rawMaterialName: rm.rawMaterialName,
+        quantityUsed: rm.requiredQuantity,
+        cost: rm.totalCost,
+      })),
+      machines: preview.machines.map((m) => ({
+        machineId: m.machineId,
+        machineName: m.machineName,
+        timeUsed: m.timeUsed,
+        cost: m.totalCost,
+      })),
+      processSteps: preview.processSteps.map((ps) => ({
+        processStepId: ps.processStepId,
+        stepName: ps.stepName,
+        stepOrder: ps.stepOrder,
+        timeRequired: ps.totalQuantity,
+        cost: ps.totalCost,
+        status: "PENDING" as const,
+      })),
+    });
+
+    toast({ title: "Batch Created", description: "Batch and Job Card have been created successfully" });
     navigate("/dashboard/batches/list");
   };
 
