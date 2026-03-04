@@ -52,6 +52,11 @@ export interface RawMaterialTransaction {
   quantity: number;
   unit: string;
   supplier: string;
+  type?: "IN" | "OUT";
+  referenceId?: string;
+  date?: string;
+  batchNumber?: string;
+  createdBy?: string;
 }
 
 export interface ProcessStep {
@@ -175,6 +180,13 @@ export interface BatchEntry {
   completionDate?: string;
 }
 
+export interface MedicineRawMaterial {
+  id: number;
+  medicineId: number;
+  rawMaterialId: number;
+  quantity: number;
+}
+
 function getStore<T>(key: string): T[] {
   try {
     return JSON.parse(localStorage.getItem(key) || "[]");
@@ -214,6 +226,18 @@ export const store = {
     items.push({ ...m, id: items.length + 1 });
     setStore("medicines", items);
   },
+  updateMedicine: (id: number, updates: Partial<MedicineEntry>) => {
+    const items = getStore<MedicineEntry>("medicines");
+    const idx = items.findIndex((m) => m.id === id);
+    if (idx !== -1) {
+      items[idx] = { ...items[idx], ...updates };
+      setStore("medicines", items);
+    }
+  },
+  deleteMedicine: (id: number) => {
+    const items = getStore<MedicineEntry>("medicines").filter((m) => m.id !== id);
+    setStore("medicines", items);
+  },
 
   getMachines: () => getStore<MachineEntry>("machines"),
   addMachine: (m: Omit<MachineEntry, "id" | "createdAt" | "updatedAt">) => {
@@ -241,6 +265,18 @@ export const store = {
     items.push({ ...r, id: items.length + 1 });
     setStore("rawmaterials", items);
   },
+  updateRawMaterial: (id: number, updates: Partial<RawMaterialEntry>) => {
+    const items = getStore<RawMaterialEntry>("rawmaterials");
+    const idx = items.findIndex((r) => r.id === id);
+    if (idx !== -1) {
+      items[idx] = { ...items[idx], ...updates };
+      setStore("rawmaterials", items);
+    }
+  },
+  deleteRawMaterial: (id: number) => {
+    const items = getStore<RawMaterialEntry>("rawmaterials").filter((r) => r.id !== id);
+    setStore("rawmaterials", items);
+  },
 
   getTransactions: () => getStore<RawMaterialTransaction>("transactions"),
   addTransaction: (t: Omit<RawMaterialTransaction, "id">) => {
@@ -253,6 +289,10 @@ export const store = {
   addProcessStep: (p: Omit<ProcessStep, "id">) => {
     const items = getStore<ProcessStep>("processsteps");
     items.push({ ...p, id: items.length + 1 });
+    setStore("processsteps", items);
+  },
+  deleteProcessStep: (id: number) => {
+    const items = getStore<ProcessStep>("processsteps").filter((p) => p.id !== id);
     setStore("processsteps", items);
   },
 
@@ -303,5 +343,30 @@ export const store = {
       items[idx] = { ...items[idx], ...updates };
       setStore("jobcards", items);
     }
+  },
+
+  // Medicine-RawMaterial BOM
+  getMedicineRawMaterials: () => getStore<MedicineRawMaterial>("medicinerawmaterials"),
+  addMedicineRawMaterial: (m: Omit<MedicineRawMaterial, "id">) => {
+    const items = getStore<MedicineRawMaterial>("medicinerawmaterials");
+    const existing = items.findIndex((x) => x.medicineId === m.medicineId && x.rawMaterialId === m.rawMaterialId);
+    if (existing !== -1) {
+      items[existing].quantity = m.quantity;
+    } else {
+      items.push({ ...m, id: items.length + 1 });
+    }
+    setStore("medicinerawmaterials", items);
+  },
+  updateMedicineRawMaterial: (id: number, quantity: number) => {
+    const items = getStore<MedicineRawMaterial>("medicinerawmaterials");
+    const idx = items.findIndex((m) => m.id === id);
+    if (idx !== -1) {
+      items[idx].quantity = quantity;
+      setStore("medicinerawmaterials", items);
+    }
+  },
+  deleteMedicineRawMaterial: (id: number) => {
+    const items = getStore<MedicineRawMaterial>("medicinerawmaterials").filter((m) => m.id !== id);
+    setStore("medicinerawmaterials", items);
   },
 };
