@@ -28,6 +28,8 @@ import FuelDetail from "./pages/dashboard/fuel/FuelDetail";
 import UpdateFuel from "./pages/dashboard/fuel/UpdateFuel";
 import CreateMedicine from "./pages/dashboard/medicines/CreateMedicine";
 import MedicineList from "./pages/dashboard/medicines/MedicineList";
+import MedicineDetail from "./pages/dashboard/medicines/MedicineDetail";
+import UpdateMedicine from "./pages/dashboard/medicines/UpdateMedicine";
 import CreateMachine from "./pages/dashboard/machines/CreateMachine";
 import MachineList from "./pages/dashboard/machines/MachineList";
 import MachineDetail from "./pages/dashboard/machines/MachineDetail";
@@ -35,9 +37,13 @@ import UpdateMachine from "./pages/dashboard/machines/UpdateMachine";
 import CreateRawMaterial from "./pages/dashboard/rawmaterial/CreateRawMaterial";
 import BulkRawMaterial from "./pages/dashboard/rawmaterial/BulkRawMaterial";
 import RawMaterialListAll from "./pages/dashboard/rawmaterial/RawMaterialListAll";
+import RawMaterialDetail from "./pages/dashboard/rawmaterial/RawMaterialDetail";
+import UpdateRawMaterial from "./pages/dashboard/rawmaterial/UpdateRawMaterial";
 import TransactionSelectMaterial from "./pages/dashboard/rawmaterial/TransactionSelectMaterial";
+import TransactionListAll from "./pages/dashboard/rawmaterial/TransactionListAll";
 import CreateProcessStep from "./pages/dashboard/process/CreateProcessStep";
 import ProcessStepList from "./pages/dashboard/process/ProcessStepList";
+import ProcessStepDetail from "./pages/dashboard/process/ProcessStepDetail";
 import BatchesPage from "./pages/dashboard/BatchesPage";
 import CreateBatch from "./pages/dashboard/batches/CreateBatch";
 import PreviewBatch from "./pages/dashboard/batches/PreviewBatch";
@@ -74,6 +80,8 @@ const App = () => (
             <Route path="medicines" element={<MedicinesPage />} />
             <Route path="medicines/add" element={<CreateMedicine />} />
             <Route path="medicines/list" element={<MedicineList />} />
+            <Route path="medicines/:medicineId" element={<MedicineDetail />} />
+            <Route path="medicines/:medicineId/edit" element={<UpdateMedicine />} />
             <Route path="medicines/:medicineId/versions" element={<MedicineVersions />} />
             <Route path="medicines/:medicineId/versions/:versionId/steps" element={<VersionSteps />} />
             <Route path="machines" element={<MachinesPage />} />
@@ -85,13 +93,17 @@ const App = () => (
             <Route path="rawmaterial/add" element={<CreateRawMaterial />} />
             <Route path="rawmaterial/bulk" element={<BulkRawMaterial />} />
             <Route path="rawmaterial/list" element={<RawMaterialListAll />} />
+            <Route path="rawmaterial/:materialId" element={<RawMaterialDetail />} />
+            <Route path="rawmaterial/:materialId/edit" element={<UpdateRawMaterial />} />
             <Route path="rawmaterial/transaction" element={<RawMaterialTransactionPage />} />
             <Route path="rawmaterial/transaction/select" element={<TransactionSelectMaterial />} />
+            <Route path="rawmaterial/transaction/list" element={<TransactionListAll />} />
             <Route path="rawmaterial/inventory" element={<RawMaterialInventoryPage />} />
             <Route path="add-rawmaterial-medicines" element={<AddRawMaterialMedicinesPage />} />
             <Route path="medicines-process" element={<ProcessStepsPage />} />
             <Route path="medicines-process/add" element={<CreateProcessStep />} />
             <Route path="medicines-process/list" element={<ProcessStepList />} />
+            <Route path="medicines-process/:stepId" element={<ProcessStepDetail />} />
             <Route path="batches" element={<BatchesPage />} />
             <Route path="batches/add" element={<CreateBatch />} />
             <Route path="batches/preview" element={<PreviewBatch />} />
