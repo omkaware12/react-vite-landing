@@ -435,4 +435,46 @@ export const store = {
     const items = getStore<MedicineRawMaterial>("medicinerawmaterials").filter((m) => m.id !== id);
     setStore("medicinerawmaterials", items);
   },
+
+  // Medicine-Machine assignments
+  getMedicineMachines: () => getStore<MedicineMachine>("medicinemachines"),
+  addMedicineMachine: (m: Omit<MedicineMachine, "id">) => {
+    const items = getStore<MedicineMachine>("medicinemachines");
+    const existing = items.findIndex((x) => x.medicineId === m.medicineId && x.machineId === m.machineId);
+    if (existing !== -1) {
+      items[existing] = { ...items[existing], ...m };
+    } else {
+      items.push({ ...m, id: items.length + 1 });
+    }
+    setStore("medicinemachines", items);
+  },
+  updateMedicineMachine: (id: number, updates: Partial<MedicineMachine>) => {
+    const items = getStore<MedicineMachine>("medicinemachines");
+    const idx = items.findIndex((m) => m.id === id);
+    if (idx !== -1) {
+      items[idx] = { ...items[idx], ...updates };
+      setStore("medicinemachines", items);
+    }
+  },
+  deleteMedicineMachine: (id: number) => {
+    const items = getStore<MedicineMachine>("medicinemachines").filter((m) => m.id !== id);
+    setStore("medicinemachines", items);
+  },
+
+  // User profile
+  getUserProfile: (): UserProfile => {
+    const stored = localStorage.getItem("userProfile");
+    if (stored) return JSON.parse(stored);
+    return {
+      firstName: "Rohti",
+      lastName: "Admin",
+      email: "rohti@company.com",
+      role: localStorage.getItem("userRole") || "admin",
+      position: "Production Manager",
+      isEnabled: true,
+      lastLogin: new Date().toISOString(),
+      createdAt: "2025-01-01T00:00:00.000Z",
+      createdBy: "System",
+    };
+  },
 };
