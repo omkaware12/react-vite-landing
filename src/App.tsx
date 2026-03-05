@@ -53,7 +53,10 @@ import EndBatch from "./pages/dashboard/batches/EndBatch";
 import EndBatchPreview from "./pages/dashboard/batches/EndBatchPreview";
 import MedicineVersions from "./pages/dashboard/medicines/MedicineVersions";
 import VersionSteps from "./pages/dashboard/medicines/VersionSteps";
+import MedicineMachines from "./pages/dashboard/medicines/MedicineMachines";
 import JobCardDetail from "./pages/dashboard/batches/JobCardDetail";
+import CreateTransaction from "./pages/dashboard/rawmaterial/CreateTransaction";
+import ProfilePage from "./pages/dashboard/ProfilePage";
 
 const queryClient = new QueryClient();
 
@@ -84,6 +87,8 @@ const App = () => (
             <Route path="medicines/:medicineId/edit" element={<UpdateMedicine />} />
             <Route path="medicines/:medicineId/versions" element={<MedicineVersions />} />
             <Route path="medicines/:medicineId/versions/:versionId/steps" element={<VersionSteps />} />
+            <Route path="medicines/:medicineId/machines" element={<MedicineMachines />} />
+            <Route path="medicines/:medicineId/versions/:versionId/steps" element={<VersionSteps />} />
             <Route path="machines" element={<MachinesPage />} />
             <Route path="machines/add" element={<CreateMachine />} />
             <Route path="machines/list" element={<MachineList />} />
@@ -96,8 +101,11 @@ const App = () => (
             <Route path="rawmaterial/:materialId" element={<RawMaterialDetail />} />
             <Route path="rawmaterial/:materialId/edit" element={<UpdateRawMaterial />} />
             <Route path="rawmaterial/transaction" element={<RawMaterialTransactionPage />} />
+            <Route path="rawmaterial/transaction/create" element={<CreateTransaction />} />
             <Route path="rawmaterial/transaction/select" element={<TransactionSelectMaterial />} />
             <Route path="rawmaterial/transaction/list" element={<TransactionListAll />} />
+            <Route path="rawmaterial/inventory" element={<RawMaterialInventoryPage />} />
+            <Route path="profile" element={<ProfilePage />} />
             <Route path="rawmaterial/inventory" element={<RawMaterialInventoryPage />} />
             <Route path="add-rawmaterial-medicines" element={<AddRawMaterialMedicinesPage />} />
             <Route path="medicines-process" element={<ProcessStepsPage />} />
