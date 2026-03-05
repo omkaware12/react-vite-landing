@@ -53,6 +53,10 @@ const MedicineDetail = () => {
           <button onClick={() => navigate(`/dashboard/medicines/${medicine.id}/versions`)} className="px-5 py-2.5 border border-[hsl(174,60%,30%)] text-[hsl(174,60%,30%)] rounded-lg font-semibold text-sm hover:bg-[hsl(174,40%,97%)] transition-colors">
             Manage Versions
           </button>
+          <button onClick={() => navigate(`/dashboard/medicines/${medicine.id}/machines`)} className="px-5 py-2.5 border border-[hsl(174,60%,30%)] text-[hsl(174,60%,30%)] rounded-lg font-semibold text-sm hover:bg-[hsl(174,40%,97%)] transition-colors">
+            Manage Machines
+          </button>
+          </button>
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <button className="flex items-center gap-2 px-5 py-2.5 bg-red-500 text-white rounded-lg font-semibold text-sm hover:bg-red-600 transition-colors">
