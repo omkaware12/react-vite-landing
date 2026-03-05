@@ -47,16 +47,49 @@ export interface RawMaterialEntry {
 
 export interface RawMaterialTransaction {
   id: number;
+  rawMaterialId: number;
   materialName: string;
   category: string;
   quantity: number;
+  remainingQuantity: number;
+  pricePerUnit: number;
   unit: string;
   supplier: string;
-  type?: "IN" | "OUT";
+  type: "IN" | "OUT";
   referenceId?: string;
   date?: string;
   batchNumber?: string;
   createdBy?: string;
+  createdAt: string;
+}
+
+export interface RawMaterialInventory {
+  id: number;
+  rawMaterialId: number;
+  rawMaterialName: string;
+  availableQuantity: number;
+  lastUpdatedAt: string;
+}
+
+export interface MedicineMachine {
+  id: number;
+  medicineId: number;
+  machineId: number;
+  quantity: number;
+  unit: "minutes" | "hours";
+  convertedHours: number;
+}
+
+export interface UserProfile {
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: string;
+  position: string;
+  isEnabled: boolean;
+  lastLogin: string;
+  createdAt: string;
+  createdBy: string;
 }
 
 export interface ProcessStep {
@@ -187,6 +220,28 @@ export interface MedicineRawMaterial {
   quantity: number;
 }
 
+// Helper to get or init inventory for a raw material
+function getOrCreateInventory(rawMaterialId: number, rawMaterialName: string): RawMaterialInventory {
+  const items = getStore<RawMaterialInventory>("inventory");
+  let inv = items.find((i) => i.rawMaterialId === rawMaterialId);
+  if (!inv) {
+    inv = { id: items.length + 1, rawMaterialId, rawMaterialName, availableQuantity: 0, lastUpdatedAt: new Date().toISOString() };
+    items.push(inv);
+    setStore("inventory", items);
+  }
+  return inv;
+}
+
+function updateInventoryQuantity(rawMaterialId: number, delta: number) {
+  const items = getStore<RawMaterialInventory>("inventory");
+  const idx = items.findIndex((i) => i.rawMaterialId === rawMaterialId);
+  if (idx !== -1) {
+    items[idx].availableQuantity += delta;
+    items[idx].lastUpdatedAt = new Date().toISOString();
+    setStore("inventory", items);
+  }
+}
+
 function getStore<T>(key: string): T[] {
   try {
     return JSON.parse(localStorage.getItem(key) || "[]");
@@ -280,9 +335,20 @@ export const store = {
 
   getTransactions: () => getStore<RawMaterialTransaction>("transactions"),
   addTransaction: (t: Omit<RawMaterialTransaction, "id">) => {
+    // ensure inventory exists
+    const rm = getStore<RawMaterialEntry>("rawmaterials").find((r) => r.id === t.rawMaterialId);
+    const inv = getOrCreateInventory(t.rawMaterialId, t.materialName);
+    const remaining = t.type === "IN" ? inv.availableQuantity + t.quantity : inv.availableQuantity - t.quantity;
     const items = getStore<RawMaterialTransaction>("transactions");
-    items.push({ ...t, id: items.length + 1 });
+    items.push({ ...t, id: items.length + 1, remainingQuantity: remaining, createdAt: new Date().toISOString() });
     setStore("transactions", items);
+    updateInventoryQuantity(t.rawMaterialId, t.type === "IN" ? t.quantity : -t.quantity);
+  },
+
+  getInventory: () => getStore<RawMaterialInventory>("inventory"),
+  getInventoryByMaterial: (rawMaterialId: number) => {
+    const items = getStore<RawMaterialInventory>("inventory");
+    return items.find((i) => i.rawMaterialId === rawMaterialId) || null;
   },
 
   getProcessSteps: () => getStore<ProcessStep>("processsteps"),
