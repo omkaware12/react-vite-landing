@@ -166,6 +166,15 @@ const DashboardLayout = () => {
                 <div className="absolute right-0 top-14 bg-white rounded-lg shadow-lg border py-2 w-40 z-50">
                   <button
                     onClick={() => {
+                      setDropdownOpen(false);
+                      navigate("/dashboard/profile");
+                    }}
+                    className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 text-gray-700"
+                  >
+                    Profile
+                  </button>
+                  <button
+                    onClick={() => {
                       localStorage.removeItem("userRole");
                       navigate("/login");
                     }}
