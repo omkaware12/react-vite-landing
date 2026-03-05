@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Search } from "lucide-react";
+import { ArrowLeft, Search, ChevronDown } from "lucide-react";
 import { store } from "@/lib/store";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 const PAGE_SIZE = 10;
 
@@ -53,9 +54,16 @@ const MedicineList = () => {
                 <td className="px-6 py-3">{m.strength}</td>
                 <td className="px-6 py-3">{m.unit}</td>
                 <td className="px-6 py-3">
-                  <button onClick={(e) => { e.stopPropagation(); navigate(`/dashboard/medicines/${m.id}/versions`); }} className="text-[hsl(174,60%,30%)] font-semibold text-sm hover:underline">
-                    Versions
-                  </button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger onClick={(e) => e.stopPropagation()} className="flex items-center gap-1 text-[hsl(174,60%,30%)] font-semibold text-sm hover:underline">
+                      Manage <ChevronDown className="w-3.5 h-3.5" />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" onClick={(e) => e.stopPropagation()}>
+                      <DropdownMenuItem onClick={() => navigate(`/dashboard/medicines/${m.id}/versions`)}>Manage Versions</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => navigate(`/dashboard/medicines/${m.id}/machines`)}>Manage Machines</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => navigate(`/dashboard/medicines/${m.id}/raw-materials`)}>Manage Raw Materials</DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </td>
               </tr>
             ))}
