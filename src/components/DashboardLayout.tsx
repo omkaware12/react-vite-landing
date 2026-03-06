@@ -11,6 +11,7 @@ import {
   PlusSquare,
   Workflow,
   Package,
+  BoxIcon,
   Search,
   Bell,
   ChevronDown,
@@ -53,6 +54,7 @@ const sidebarEntries: SidebarEntry[] = [
   },
   { label: "Process Steps", icon: Workflow, path: "/dashboard/medicines-process" },
   { label: "Batches", icon: Package, path: "/dashboard/batches" },
+  { label: "Packaging", icon: BoxIcon, path: "/dashboard/packaging" },
 ];
 
 const SidebarLink = ({ item }: { item: SidebarItem }) => (

@@ -54,9 +54,15 @@ import EndBatchPreview from "./pages/dashboard/batches/EndBatchPreview";
 import MedicineVersions from "./pages/dashboard/medicines/MedicineVersions";
 import VersionSteps from "./pages/dashboard/medicines/VersionSteps";
 import MedicineMachines from "./pages/dashboard/medicines/MedicineMachines";
+import MedicineRawMaterials from "./pages/dashboard/medicines/MedicineRawMaterials";
 import JobCardDetail from "./pages/dashboard/batches/JobCardDetail";
+import UpdateBatch from "./pages/dashboard/batches/UpdateBatch";
 import CreateTransaction from "./pages/dashboard/rawmaterial/CreateTransaction";
 import ProfilePage from "./pages/dashboard/ProfilePage";
+import PackagingPage from "./pages/dashboard/PackagingPage";
+import CreatePackaging from "./pages/dashboard/packaging/CreatePackaging";
+import PackagingList from "./pages/dashboard/packaging/PackagingList";
+import PackagingDetail from "./pages/dashboard/packaging/PackagingDetail";
 
 const queryClient = new QueryClient();
 
@@ -88,7 +94,7 @@ const App = () => (
             <Route path="medicines/:medicineId/versions" element={<MedicineVersions />} />
             <Route path="medicines/:medicineId/versions/:versionId/steps" element={<VersionSteps />} />
             <Route path="medicines/:medicineId/machines" element={<MedicineMachines />} />
-            <Route path="medicines/:medicineId/versions/:versionId/steps" element={<VersionSteps />} />
+            <Route path="medicines/:medicineId/raw-materials" element={<MedicineRawMaterials />} />
             <Route path="machines" element={<MachinesPage />} />
             <Route path="machines/add" element={<CreateMachine />} />
             <Route path="machines/list" element={<MachineList />} />
@@ -120,6 +126,11 @@ const App = () => (
             <Route path="batches/:batchId/end" element={<EndBatch />} />
             <Route path="batches/:batchId/end/preview" element={<EndBatchPreview />} />
             <Route path="batches/:batchId/jobcard" element={<JobCardDetail />} />
+            <Route path="batches/:batchId/update" element={<UpdateBatch />} />
+            <Route path="packaging" element={<PackagingPage />} />
+            <Route path="packaging/add" element={<CreatePackaging />} />
+            <Route path="packaging/list" element={<PackagingList />} />
+            <Route path="packaging/:packagingId" element={<PackagingDetail />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
