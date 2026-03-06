@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { store } from "@/lib/store";
-import { ArrowLeft, Edit, FileText, FlaskConical, Cog, Users, DollarSign, ClipboardList } from "lucide-react";
+import { ArrowLeft, Edit, FileText, FlaskConical, Cog, Users, DollarSign, ClipboardList, Wrench } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -76,6 +76,11 @@ const BatchDetail = () => {
           <Button variant="outline" onClick={() => setEditing(!editing)} className="gap-2">
             <Edit className="w-4 h-4" /> {editing ? "Cancel" : "Update Batch"}
           </Button>
+          {batch.status === "In Progress" && (
+            <Button variant="outline" onClick={() => navigate(`/dashboard/batches/${batchId}/update`)} className="gap-2">
+              <Wrench className="w-4 h-4" /> Adjust Batch
+            </Button>
+          )}
         </div>
       </div>
 
