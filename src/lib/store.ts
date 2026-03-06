@@ -220,6 +220,24 @@ export interface MedicineRawMaterial {
   quantity: number;
 }
 
+export interface PackagingEntry {
+  id: number;
+  packagingName: string;
+  capacity: number;
+  unitType: string;
+  active: boolean;
+  createdAt: string;
+}
+
+export interface BatchAdjustment {
+  batchId: number;
+  reason: string;
+  rawMaterials: { rawMaterialId: number; additionalQuantity: number }[];
+  machines: { machineId: number; additionalHours: number }[];
+  processSteps: { processStepId: number; additionalUnits: number }[];
+  adjustedAt: string;
+}
+
 // Helper to get or init inventory for a raw material
 function getOrCreateInventory(rawMaterialId: number, rawMaterialName: string): RawMaterialInventory {
   const items = getStore<RawMaterialInventory>("inventory");
@@ -459,6 +477,102 @@ export const store = {
   deleteMedicineMachine: (id: number) => {
     const items = getStore<MedicineMachine>("medicinemachines").filter((m) => m.id !== id);
     setStore("medicinemachines", items);
+  },
+
+  // Bulk delete all medicine raw materials for a medicine
+  deleteAllMedicineRawMaterials: (medicineId: number) => {
+    const items = getStore<MedicineRawMaterial>("medicinerawmaterials").filter((m) => m.medicineId !== medicineId);
+    setStore("medicinerawmaterials", items);
+  },
+
+  // Version management
+  updateVersion: (id: number, updates: Partial<MedicineVersion>) => {
+    const items = getStore<MedicineVersion>("medicineversions");
+    const idx = items.findIndex((v) => v.id === id);
+    if (idx !== -1) {
+      items[idx] = { ...items[idx], ...updates };
+      setStore("medicineversions", items);
+    }
+  },
+  deleteVersion: (id: number) => {
+    const items = getStore<MedicineVersion>("medicineversions").filter((v) => v.id !== id);
+    setStore("medicineversions", items);
+  },
+  updateStepInVersion: (versionId: number, stepIndex: number, updates: Partial<VersionStep>) => {
+    const items = getStore<MedicineVersion>("medicineversions");
+    const idx = items.findIndex((v) => v.id === versionId);
+    if (idx !== -1 && items[idx].steps[stepIndex]) {
+      items[idx].steps[stepIndex] = { ...items[idx].steps[stepIndex], ...updates };
+      setStore("medicineversions", items);
+    }
+  },
+  deleteStepFromVersion: (versionId: number, stepIndex: number) => {
+    const items = getStore<MedicineVersion>("medicineversions");
+    const idx = items.findIndex((v) => v.id === versionId);
+    if (idx !== -1) {
+      items[idx].steps.splice(stepIndex, 1);
+      setStore("medicineversions", items);
+    }
+  },
+
+  // Packaging
+  getPackaging: () => getStore<PackagingEntry>("packaging"),
+  addPackaging: (p: Omit<PackagingEntry, "id" | "createdAt">) => {
+    const items = getStore<PackagingEntry>("packaging");
+    items.push({ ...p, id: items.length + 1, createdAt: new Date().toISOString() });
+    setStore("packaging", items);
+  },
+  updatePackaging: (id: number, updates: Partial<PackagingEntry>) => {
+    const items = getStore<PackagingEntry>("packaging");
+    const idx = items.findIndex((p) => p.id === id);
+    if (idx !== -1) {
+      items[idx] = { ...items[idx], ...updates };
+      setStore("packaging", items);
+    }
+  },
+  deletePackaging: (id: number) => {
+    const items = getStore<PackagingEntry>("packaging").filter((p) => p.id !== id);
+    setStore("packaging", items);
+  },
+
+  // Batch adjustments
+  getBatchAdjustments: () => getStore<BatchAdjustment>("batchadjustments"),
+  addBatchAdjustment: (a: Omit<BatchAdjustment, "adjustedAt">) => {
+    const items = getStore<BatchAdjustment>("batchadjustments");
+    items.push({ ...a, adjustedAt: new Date().toISOString() });
+    setStore("batchadjustments", items);
+    // Apply adjustments to the batch
+    const batches = getStore<BatchEntry>("batches");
+    const bIdx = batches.findIndex((b) => b.id === a.batchId);
+    if (bIdx !== -1) {
+      const batch = batches[bIdx];
+      a.rawMaterials.forEach((rm) => {
+        const mat = batch.rawMaterials.find((m) => m.rawMaterialId === rm.rawMaterialId);
+        if (mat) {
+          mat.consumedQuantity += rm.additionalQuantity;
+          mat.totalCost = mat.consumedQuantity * mat.pricePerUnit;
+        }
+      });
+      a.machines.forEach((mc) => {
+        const machine = batch.machines.find((m) => m.machineId === mc.machineId);
+        if (machine) {
+          machine.timeUsed += mc.additionalHours;
+          machine.totalCost = machine.timeUsed * machine.costPerTimeUnit;
+        }
+      });
+      a.processSteps.forEach((ps) => {
+        const step = batch.processSteps.find((s) => s.processStepId === ps.processStepId);
+        if (step) {
+          step.totalQuantity += ps.additionalUnits;
+          step.totalCost = step.totalQuantity * step.pricePerUnit;
+        }
+      });
+      batch.totalMaterialCost = batch.rawMaterials.reduce((s, r) => s + r.totalCost, 0);
+      batch.totalMachineCost = batch.machines.reduce((s, m) => s + m.totalCost, 0);
+      batch.totalLabourCost = batch.processSteps.reduce((s, p) => s + p.totalCost, 0);
+      batch.totalBatchCost = batch.totalMaterialCost + batch.totalMachineCost + batch.totalLabourCost;
+      setStore("batches", batches);
+    }
   },
 
   // User profile
